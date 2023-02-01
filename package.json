@@ -21,6 +21,8 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.42.1",
     "react-redux": "^8.0.5",
+    "react-spinners": "^0.13.8",
+    "react-toastify": "^9.1.1",
     "vite-tsconfig-paths": "^4.0.5",
     "yup": "^0.32.11"
   },
