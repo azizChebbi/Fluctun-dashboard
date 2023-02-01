@@ -1,11 +1,13 @@
 // import logo from "../../assets/icons/logo.png";
 import { tabs } from "../../utils/tabs";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "@icons/logo.svg";
 import smallLogo from "@icons/smallLogo.svg";
 import open from "../../assets/icons/openSidebar.svg";
 import close from "../../assets/icons/closeSidebar.svg";
 import { FC } from "react";
+import { Auth, useAuth } from "context/auth-context";
+import usePathname from "@helpers/usePathname";
 
 interface IProps {
   sidebarIsSmall: boolean;
@@ -13,6 +15,10 @@ interface IProps {
 }
 
 const Sidebar: FC<IProps> = ({ sidebarIsSmall, setSidebarIsSmall }) => {
+  const { logout } = useAuth() as unknown as Auth;
+  const isActiveLink = (path: string) => {
+    return path == window.location.pathname;
+  };
   return (
     <div className=" h-screen overflow-hidden">
       <div className=" m-auto h-full grid grid-rows-[20%_1fr_30%] ">
@@ -51,23 +57,23 @@ const Sidebar: FC<IProps> = ({ sidebarIsSmall, setSidebarIsSmall }) => {
                 to={tab.href}
                 key={index}
                 className={` gap-2 py-5 hover:bg-[#F8F8F8]${
-                  index == 2 ? " border-l-4 border-blue" : ""
+                  tab.href == usePathname() ? " border-l-4 border-blue" : ""
                 }`}
               >
-                <p
+                <div
                   className={`flex items-center ${
                     sidebarIsSmall ? " justify-center" : "ml-[20%]"
                   } `}
                 >
-                  <p className={` ${sidebarIsSmall ? "" : "w-12"} `}>
+                  <div className={` ${sidebarIsSmall ? "" : "w-12"} `}>
                     <img src={tab.svg} alt={tab.label} />
-                  </p>
+                  </div>
                   {!sidebarIsSmall && (
-                    <a className=" text-xs font-medium text-right">
+                    <span className=" text-xl font-medium text-right">
                       {tab.label}
-                    </a>
+                    </span>
                   )}
-                </p>
+                </div>
               </Link>
             );
           })}
@@ -75,13 +81,13 @@ const Sidebar: FC<IProps> = ({ sidebarIsSmall, setSidebarIsSmall }) => {
         <div
           className={`flex items-center ${sidebarIsSmall ? "" : "ml-[20%]"} `}
         >
-          <Link to="" className=" gap-2 w-full">
-            <p
+          <Link to="" className=" gap-2 w-full" onClick={logout}>
+            <div
               className={` flex items-center ${
                 sidebarIsSmall ? " justify-center" : ""
               } `}
             >
-              <p className={` ${sidebarIsSmall ? "" : "w-8"} `}>
+              <div className={` ${sidebarIsSmall ? "" : "w-8"} `}>
                 <svg
                   width="18"
                   height="16"
@@ -94,9 +100,9 @@ const Sidebar: FC<IProps> = ({ sidebarIsSmall, setSidebarIsSmall }) => {
                     fill="#142B33"
                   />
                 </svg>
-              </p>
-              {!sidebarIsSmall && <a className=" text-xs">Quitter</a>}
-            </p>
+              </div>
+              {!sidebarIsSmall && <span className=" text-xl">Quitter</span>}
+            </div>
           </Link>
         </div>
       </div>

@@ -6,7 +6,7 @@ export const actions = {
 
 export const getAccessToken = () => {
   const sat = localStorage.getItem("at");
-  if (typeof sat == "string") {
+  if (typeof sat == "string" && sat.length != 0) {
     const at: string = JSON.parse(sat);
     return at;
   }

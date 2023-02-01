@@ -13,27 +13,27 @@ interface Tab {
 export const tabs: Tab[] = [
   {
     label: "Statistiques",
-    href: "",
+    href: "/",
     svg: statistiques,
   },
   {
     label: "Enseignants",
-    href: "",
+    href: "/enseignants",
     svg: enseignants,
   },
   {
     label: "Etudiants",
-    href: "",
+    href: "/etudiants",
     svg: etudiants,
   },
   {
     label: "Questions",
-    href: "",
+    href: "/questions",
     svg: questions,
   },
   {
     label: "Cours",
-    href: "",
+    href: "/cours",
     svg: cours,
   },
 ];

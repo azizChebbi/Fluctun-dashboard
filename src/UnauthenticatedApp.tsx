@@ -1,10 +1,11 @@
 import Login from "@pages/Login";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 const UnauthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 };

@@ -1,7 +1,11 @@
 import Sidebar from "@molecules/Sidebar";
-import React, { useState } from "react";
+import React, { FC, ReactNode, useState } from "react";
 
-const Wrapper = ({ children }: { children: any }) => {
+interface IProps {
+  children?: ReactNode;
+}
+
+const Wrapper: FC<IProps> = ({ children }) => {
   const [sidebarIsSmall, setSidebarIsSmall] = useState<boolean>(false);
   return (
     <div
