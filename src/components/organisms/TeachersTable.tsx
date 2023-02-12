@@ -3,13 +3,14 @@ import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import Tooltip from "@mui/material/Tooltip";
+import { Box } from "@mui/material";
 
 const columns: GridColDef[] = [
-  // { field: "id", headerName: "ID", width: 70, hideable: false },
   {
     field: "name",
     headerName: "Nom",
     headerAlign: "center",
+    headerClassName: "teachers-header",
     align: "center",
     flex: 1,
   },
@@ -17,6 +18,7 @@ const columns: GridColDef[] = [
     field: "firstName",
     headerName: "Prénom",
     headerAlign: "center",
+    headerClassName: "teachers-header",
     align: "center",
     flex: 1,
   },
@@ -25,50 +27,40 @@ const columns: GridColDef[] = [
     headerName: "CIN",
     type: "string",
     headerAlign: "center",
+    headerClassName: "teachers-header",
     align: "center",
-
     flex: 1,
-
-    // width: 130,
   },
   {
     field: "subject",
     headerName: "Matiére",
     headerAlign: "center",
+    headerClassName: "teachers-header",
     align: "center",
-
     flex: 1,
-
-    // width: 90,
   },
   {
     field: "email",
     headerName: "Email",
-    // width: 160,
     headerAlign: "center",
+    headerClassName: "teachers-header",
     align: "center",
-
     flex: 1,
   },
   {
     field: "number",
     headerName: "Numéro",
     headerAlign: "center",
+    headerClassName: "teachers-header",
     align: "center",
-
     flex: 1,
-
-    // width: 160,
   },
   {
     field: "actions",
     headerName: "",
     filterable: false,
     align: "center",
-
     flex: 0.5,
-
-    // width: 160,
     renderCell: (params) => {
       return (
         <div className=" flex items-center justify-center gap-2">
@@ -94,17 +86,24 @@ interface IProps {
 
 const TeachersTable: React.FC<IProps> = ({ rows }) => {
   return (
-    <div className=" h-[500px]  w-full">
+    <Box
+      className=" h-[500px]  w-full"
+      sx={{
+        "& .teachers-header": {
+          color: "#8E8E8E",
+        },
+      }}
+    >
       <DataGrid
         sx={{ fontSize: "12px" }}
         rows={rows}
         columns={columns}
         pageSize={8}
         rowsPerPageOptions={[8]}
-        components={{ Toolbar: GridToolbar }}
+        // components={{ Toolbar: GridToolbar }}
         disableSelectionOnClick
       />
-    </div>
+    </Box>
   );
 };
 

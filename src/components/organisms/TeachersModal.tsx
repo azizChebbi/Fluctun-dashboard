@@ -1,8 +1,21 @@
-import * as React from "react";
+import React, { Reducer, useEffect, useReducer } from "react";
 import Modal from "@mui/material/Modal";
 import TeachersForm from "@molecules/TeachersForm";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import Button from "@atoms/Button";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import ClipLoader from "react-spinners/ClipLoader";
+import { Tooltip } from "@mui/material";
+import {
+  addTeachersInitialState,
+  Action,
+  addTeachersReducer,
+  AddTeachersState,
+  Teacher,
+} from "@reducers/teachers";
+import { useMutation } from "react-query";
+import { api } from "api";
+import { notifyError, notifySuccess } from "@utils/notify";
 
 const fields = ["Nom", "Prénom", "Cin", "Matiére", "Email", "Numéro"];
 
@@ -12,13 +25,54 @@ interface IProps {
 }
 
 const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
-  const [data, setData] = React.useState<number[]>([]);
+  const [data, setData] = React.useState<string[]>([]);
   const [counter, setCounter] = React.useState(0);
-  const handleClose = () => setOpen(false);
+  const [state, dispatch] = useReducer<Reducer<AddTeachersState, Action>>(
+    addTeachersReducer,
+    addTeachersInitialState
+  );
+  console.log(state.teachers.length);
+  console.log(state.teachers);
+
+  const mutation = useMutation("create-teachers", () => {
+    return api.post("/auth/register-teachers", state.teachers);
+  });
+  const handleClose = () => {
+    setOpen(false);
+    dispatch({
+      type: "DELETE_TEACHERS",
+      payload: null as unknown as Teacher,
+    });
+    setCounter(0);
+    setData([]);
+  };
+
+  const isAllFieldsAreValid = () => {
+    const teachers = state.teachers;
+    for (let i = 0; i < teachers.length; i++) {
+      if (!teachers[i].isValid) return false;
+    }
+    return true;
+  };
 
   const addForm = () => {
-    setData((prev) => [...prev, counter]);
     setCounter(counter + 1);
+  };
+
+  const handleValidation = () => {
+    mutation.mutate();
+    const { data, isSuccess, isError } = mutation;
+    console.log(mutation);
+    if (isSuccess || data) {
+      handleClose();
+      notifySuccess("Les enseignants sont ajoutés avec succées");
+    }
+    if (isError) {
+      notifyError(
+        "Un erreur c'est produite, ca peut étre une duplication des emails ou des cin ou des champs invalides"
+      );
+      mutation.reset();
+    }
   };
 
   return (
@@ -39,8 +93,15 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
               </p>
             ))}
           </div>
-          {data.map((id) => (
-            <TeachersForm id={id} setData={setData} key={id} />
+          {[...Array(counter).keys()].map((id) => (
+            <div key={id} className=" relative">
+              <TeachersForm
+                setData={setData}
+                setCounter={setCounter}
+                state={state}
+                dispatch={dispatch}
+              />
+            </div>
           ))}
           {data.length < 5 && (
             <button
@@ -52,7 +113,23 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
             </button>
           )}
           <div className=" w-max flex items-center justify-center gap-8 ml-auto mt-6 mr-16">
-            <Button className=" py-2 px-12">Valider</Button>
+            {mutation.isLoading ? (
+              <ClipLoader color="#142B33" />
+            ) : (
+              <Button
+                className={`py-2 px-12 ${
+                  isAllFieldsAreValid() ? "" : " bg-gray-400"
+                }`}
+                disabled={
+                  !isAllFieldsAreValid() || state.teachers.length == 0
+                    ? true
+                    : false
+                }
+                onClick={handleValidation}
+              >
+                Valider
+              </Button>
+            )}
             <button
               className=" text-blue font-semibold underline underline-offset-1"
               onClick={handleClose}

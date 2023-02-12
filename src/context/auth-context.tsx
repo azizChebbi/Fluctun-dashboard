@@ -1,8 +1,7 @@
 import FullPageSpinner from "@pages/FullPageSpinner";
 import { api } from "api";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import * as React from "react";
-import { toast } from "react-toastify";
 import { redirect } from "react-router-dom";
 import { notifyError } from "@utils/notify";
 
@@ -24,6 +23,7 @@ function AuthProvider(props: any) {
       localStorage.setItem("at", JSON.stringify(res.data.access_token));
       return redirect("/");
     } catch (error) {
+      logout();
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -38,7 +38,7 @@ function AuthProvider(props: any) {
     async ({ email, password }: { email: string; password: string }) => {
       try {
         const res = await axios.post(
-          "http://localhost:9000/auth/login",
+          "http://localhost:9000/auth/loginAdmin",
           {
             email,
             password,
@@ -57,10 +57,7 @@ function AuthProvider(props: any) {
   );
   const register = React.useCallback(() => {}, []);
   const logout = React.useCallback(async () => {
-    console.log(localStorage.getItem("at"));
     localStorage.removeItem("at");
-    console.log("logout clicked");
-    console.log(localStorage.getItem("at"));
     try {
       await api.post("/auth/logout");
       window.location.replace("http://localhost:3000/login");

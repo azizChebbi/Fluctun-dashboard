@@ -8,10 +8,12 @@ interface IProps
   children?: ReactNode;
 }
 
-const Button: FC<IProps> = ({ children, className, ...props }) => {
+const Button: FC<IProps> = ({ children, className, disabled, ...props }) => {
   return (
     <button
-      className={` text-white text-base font-semibold bg-blue rounded py-3 px-8 text-center outline-none border-none ${className}`}
+      className={` text-white text-base font-semibold bg-blue rounded py-3 px-8 text-center outline-none border-none ${
+        disabled ? "cursor-not-allowed bg-gray-400" : ""
+      } ${className}`}
       {...props}
     >
       {children}

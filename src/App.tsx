@@ -1,16 +1,16 @@
+import useAccessToken from "@hooks/useAccessToken";
 import Wrapper from "@layouts/Wrapper";
-import FullPageSpinner from "@pages/FullPageSpinner";
 import { NotifyContainer } from "@utils/notify";
 import AuthenticatedApp from "AuthenticatedApp";
-import { getAccessToken } from "context";
 import UnauthenticatedApp from "UnauthenticatedApp";
 
 function App() {
-  const at = getAccessToken();
+  const { token } = useAccessToken();
+
   return (
     <div className="App">
       <NotifyContainer />
-      {at ? (
+      {token ? (
         <Wrapper>
           <AuthenticatedApp />
         </Wrapper>

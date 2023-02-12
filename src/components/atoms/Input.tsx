@@ -7,6 +7,8 @@ interface IProps
   > {
   value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
+  register?: any;
+  name?: string;
 }
 
 const Input: FC<IProps> = ({
@@ -14,12 +16,17 @@ const Input: FC<IProps> = ({
   setValue,
   placeholder,
   className,
+  register = (n: string) => null,
+  name,
+  onChange,
   ...props
 }) => {
   return (
     <input
-      className={` border-none outline-none flex-1 ${className}`}
+      className={` border-none outline-none flex-1  ${className}`}
       placeholder={placeholder}
+      {...props}
+      {...register(name)}
     />
   );
 };

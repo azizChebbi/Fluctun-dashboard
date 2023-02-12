@@ -53,7 +53,6 @@ export const generateTeachers = () => {
       id: 6,
       name: "Kamel",
       firstName: "Chebbi",
-
       cin: "073645738",
       subject: "Mathématique",
       email: "kamel@gmail.com",
@@ -63,7 +62,6 @@ export const generateTeachers = () => {
       id: 7,
       name: "Kamel",
       firstName: "Chebbi",
-
       cin: "073645738",
       subject: "Mathématique",
       email: "kamel@gmail.com",
@@ -73,7 +71,6 @@ export const generateTeachers = () => {
       id: 8,
       name: "Kamel",
       firstName: "Chebbi",
-
       cin: "073645738",
       subject: "Mathématique",
       email: "kamel@gmail.com",
