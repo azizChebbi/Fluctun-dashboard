@@ -30,11 +30,12 @@ export type AddTeachersState = {
 export type ActionsTypes =
   | "UPDATE_TEACHER"
   | "DELETE_TEACHER"
-  | "DELETE_TEACHERS";
+  | "DELETE_TEACHERS"
+  | "REMAIN_TEACHERS_WITH_IDS";
 
 export type Action = {
   type: ActionsTypes;
-  payload: Teacher;
+  payload: any;
 };
 
 export const addTeachersInitialState: AddTeachersState = {
@@ -57,7 +58,10 @@ export const addTeachersReducer = (
         const newTeachers = state.teachers;
         newTeachers.splice(idx, 1);
         return {
-          teachers: [...newTeachers, action.payload],
+          teachers: [
+            ...newTeachers,
+            { ...action.payload, number: parseInt(action.payload.number, 10) },
+          ],
         };
       }
     case "DELETE_TEACHER":
@@ -73,7 +77,14 @@ export const addTeachersReducer = (
       return {
         teachers: [],
       };
-
+    case "REMAIN_TEACHERS_WITH_IDS":
+      if (action.payload.teachersIDS.length == 0) return { teachers: [] };
+      let teachersToBeRemaind = state.teachers.filter(
+        (teacher) => action.payload.teachersIDS.indexOf(teacher.id) != -1
+      );
+      return {
+        teachers: teachersToBeRemaind,
+      };
     default:
       return state;
   }

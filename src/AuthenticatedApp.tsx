@@ -1,6 +1,6 @@
 import Cours from "@pages/Cours";
-import Enseignants from "@pages/Enseignants";
-import Etudiants from "@pages/Etudiants";
+import Enseignants from "@pages/Teachers";
+import Etudiants from "@pages/Students";
 import Questions from "@pages/Questions";
 import Statistiques from "@pages/Statistiques";
 import { Routes, Route, Navigate } from "react-router-dom";

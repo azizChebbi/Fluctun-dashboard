@@ -16,6 +16,7 @@ import {
 import { useMutation } from "react-query";
 import { api } from "api";
 import { notifyError, notifySuccess } from "@utils/notify";
+import { queryClient } from "context/Provider";
 
 const fields = ["Nom", "Prénom", "Cin", "Matiére", "Email", "Numéro"];
 
@@ -31,12 +32,34 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
     addTeachersReducer,
     addTeachersInitialState
   );
-  console.log(state.teachers.length);
-  console.log(state.teachers);
 
-  const mutation = useMutation("create-teachers", () => {
-    return api.post("/auth/register-teachers", state.teachers);
-  });
+  useEffect(() => {
+    // console.log(data.findIndex("3"));
+    dispatch({
+      type: "REMAIN_TEACHERS_WITH_IDS",
+      payload: {
+        teachersIDS: data,
+      },
+    });
+  }, [data]);
+
+  const createTeachers = useMutation(
+    "create-teachers",
+    () => api.post("/auth/register-teachers", state.teachers),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["teachers"]);
+        handleClose();
+        notifySuccess("Les enseignants sont ajoutés avec succées");
+      },
+      onError: () => {
+        notifyError(
+          "Un erreur c'est produite, ca peut étre une duplication des emails ou des cin ou des champs invalides"
+        );
+        // mutation.reset();
+      },
+    }
+  );
   const handleClose = () => {
     setOpen(false);
     dispatch({
@@ -60,19 +83,19 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
   };
 
   const handleValidation = () => {
-    mutation.mutate();
-    const { data, isSuccess, isError } = mutation;
-    console.log(mutation);
-    if (isSuccess || data) {
-      handleClose();
-      notifySuccess("Les enseignants sont ajoutés avec succées");
-    }
-    if (isError) {
-      notifyError(
-        "Un erreur c'est produite, ca peut étre une duplication des emails ou des cin ou des champs invalides"
-      );
-      mutation.reset();
-    }
+    createTeachers.mutate();
+    // const { data, isSuccess, isError } = mutation;
+    // console.log(mutation);
+    // if (isSuccess || data) {
+    //   handleClose();
+    //   notifySuccess("Les enseignants sont ajoutés avec succées");
+    // }
+    // if (isError) {
+    //   notifyError(
+    //     "Un erreur c'est produite, ca peut étre une duplication des emails ou des cin ou des champs invalides"
+    //   );
+    //   mutation.reset();
+    // }
   };
 
   return (
@@ -113,7 +136,7 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
             </button>
           )}
           <div className=" w-max flex items-center justify-center gap-8 ml-auto mt-6 mr-16">
-            {mutation.isLoading ? (
+            {createTeachers.isLoading ? (
               <ClipLoader color="#142B33" />
             ) : (
               <Button

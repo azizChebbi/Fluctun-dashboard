@@ -6,12 +6,27 @@ interface IProps
     HTMLButtonElement
   > {
   children?: ReactNode;
+  color?: string;
+  outlined?: boolean;
 }
 
-const Button: FC<IProps> = ({ children, className, disabled, ...props }) => {
+const Button: FC<IProps> = ({
+  children,
+  color,
+  className,
+  disabled,
+  outlined,
+  ...props
+}) => {
   return (
     <button
-      className={` text-white text-base font-semibold bg-blue rounded py-3 px-8 text-center outline-none border-none ${
+      style={{
+        color: outlined ? color || "#142B33" : "white",
+        background: outlined ? "white" : color || "#142B33",
+        borderColor: color || "#142B33",
+      }}
+      className={` border-[1px]
+      text-base font-semibold rounded py-3 px-8 text-center outline-none ${
         disabled ? "cursor-not-allowed bg-gray-400" : ""
       } ${className}`}
       {...props}
@@ -20,5 +35,13 @@ const Button: FC<IProps> = ({ children, className, disabled, ...props }) => {
     </button>
   );
 };
+
+// ${
+//   outlined
+//     ? `text-${color ? `${color}` : "blue"} bg-white border-[1px] border-${
+//         color ? `${color}` : "blue"
+//       }`
+//     : `text-white bg-${color ? `${color}` : "blue"} border-none`
+// }
 
 export default Button;

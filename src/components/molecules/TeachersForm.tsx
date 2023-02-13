@@ -60,6 +60,18 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
     mode: "onChange",
   });
 
+  const onDelete = async (e: any) => {
+    e.preventDefault();
+    // await deleteTeacherFromState();
+    setCounter((counter) => counter - 1);
+    setData((prevState) => {
+      const arr = prevState;
+      const ind = arr.lastIndexOf(id);
+      arr.splice(ind, 1);
+      return [...arr];
+    });
+  };
+
   useEffect(() => {
     const subscription = watch((data) => {
       console.log(data, isValid);
@@ -122,31 +134,6 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
   }, [isValid]);
 
   const onSubmit = (data: FormData) => console.log(data);
-  const onDelete = (e: any) => {
-    e.preventDefault();
-    const { firstName, lastName, cin, subject, email, number } = getValues();
-    dispatch({
-      type: "DELETE_TEACHER",
-      payload: {
-        id,
-        firstName,
-        lastName,
-        cin,
-        subject: subject?.value,
-        email,
-        number,
-        isValid,
-        instituteId,
-      },
-    });
-    setCounter((counter) => counter - 1);
-    setData((prevState) => {
-      const arr = prevState;
-      const ind = arr.lastIndexOf(id);
-      arr.splice(ind, 1);
-      return [...arr];
-    });
-  };
 
   return (
     <form
@@ -186,9 +173,9 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
               ref={null}
               placeholder="Matiere"
               options={[
-                { value: "mathémathique", label: "Mathémathique" },
-                { value: "Sscience", label: "Science" },
-                { value: "physique", label: "Physique" },
+                { value: "Mathémathique", label: "Mathémathique" },
+                { value: "Science", label: "Science" },
+                { value: "Physique", label: "Physique" },
               ]}
               className={`${errors.subject ? " text-red-500" : ""}`}
             />

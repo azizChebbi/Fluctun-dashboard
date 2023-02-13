@@ -1,9 +1,10 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import { Box } from "@mui/material";
+import TeacherActionCell from "@atoms/TeacherActionCell";
 
 const columns: GridColDef[] = [
   {
@@ -62,20 +63,8 @@ const columns: GridColDef[] = [
     align: "center",
     flex: 0.5,
     renderCell: (params) => {
-      return (
-        <div className=" flex items-center justify-center gap-2">
-          <Tooltip title="delete">
-            <DeleteOutlineOutlinedIcon
-              sx={{ color: "#8E8E8E", cursor: "pointer" }}
-            />
-          </Tooltip>
-          <Tooltip title="Edit">
-            <ModeEditOutlinedIcon
-              sx={{ color: "#8E8E8E", cursor: "pointer" }}
-            />
-          </Tooltip>
-        </div>
-      );
+      const id = params.value;
+      return <TeacherActionCell id={id} />;
     },
   },
 ];
@@ -85,6 +74,9 @@ interface IProps {
 }
 
 const TeachersTable: React.FC<IProps> = ({ rows }) => {
+  const [teacherInformationsModalIsOpen, setTeacherInformationsModalIsOpen] =
+    useState<boolean>(false);
+
   return (
     <Box
       className=" h-[500px]  w-full"

@@ -10,7 +10,7 @@ import {
   QueryClientProvider,
 } from "react-query";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 interface IProps {
   children?: React.ReactNode;
