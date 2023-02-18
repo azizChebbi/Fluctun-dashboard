@@ -32,7 +32,7 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
   //==================================================================
   // state
   //==================================================================
-
+  const [teacher, setTeacher] = useState<FullTeacherData | null>(null);
   const [informations, setInformations] = useState<InfoLine[]>(() => {
     return [];
   });
@@ -50,6 +50,7 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
       const teacher: FullTeacherData = data?.data.find(
         (t: FullTeacherData) => t.id == id
       ) as FullTeacherData;
+      setTeacher(teacher);
       setInformations(() => {
         const arr: InfoLine[] = [
           { label: "Nom", value: teacher.lastName },
@@ -58,7 +59,6 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
           { label: "Matiére", value: teacher.subject },
           { label: "Numéro", value: teacher.number },
           { label: "Email", value: teacher.email },
-          { label: "Bio", value: teacher.bio },
         ];
         return arr;
       });
@@ -119,9 +119,7 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
             alt="teacher"
           />
         </div>
-        <p className=" text-base text-text leading-6">
-          {getValueFromInformationsByLabel("Bio")}
-        </p>
+        <p className=" text-base text-text leading-6">{teacher?.bio}</p>
         <div className=" mt-10">
           <p className=" text-blue font-medium mb-2">
             Nombre totale de réponses :

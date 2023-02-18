@@ -56,8 +56,8 @@ export const teachersColumns: GridColDef[] = [
     field: "actions",
     headerName: "",
     filterable: false,
-    align: "center",
-    flex: 0.5,
+    align: "right",
+    flex: 0.7,
     renderCell: (params: any) => {
       const id = params.value;
       return <TeacherActionCell id={id} />;

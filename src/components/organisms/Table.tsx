@@ -20,7 +20,7 @@ export const Table: React.FC<IProps> = ({ rows, columns, noRowsIndicator }) => {
       }}
     >
       <DataGrid
-        sx={{ fontSize: "12px" }}
+        sx={{ fontSize: "14px", background: "white" }}
         rows={rows}
         columns={columns}
         pageSize={8}

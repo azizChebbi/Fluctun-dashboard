@@ -1,7 +1,4 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
-import Tooltip from "@mui/material/Tooltip";
 import { useMutation, useQuery } from "react-query";
 import { api } from "api";
 import { queryClient } from "context/Provider";
@@ -11,6 +8,7 @@ import { FullTeacherData } from "@helpers/generateTables";
 import { notifyError, notifySuccess } from "@utils/notify";
 import ClipLoader from "react-spinners/ClipLoader";
 import { TeacherInformation } from "@features/teachers";
+import ActionCell from "@atoms/ActionCell";
 
 interface IProps {
   id: string;
@@ -67,18 +65,10 @@ const StudentActionCell: FC<IProps> = ({ id }) => {
   };
   return (
     <div className=" flex items-center justify-center gap-4">
-      <Tooltip title="delete">
-        <button onClick={handleDeleteModalOpen}>
-          <DeleteOutlineOutlinedIcon
-            sx={{ color: "#8E8E8E", cursor: "pointer" }}
-          />
-        </button>
-      </Tooltip>
-      <Tooltip title="Edit">
-        <button onClick={handleEditModalOpen}>
-          <ModeEditOutlinedIcon sx={{ color: "#8E8E8E", cursor: "pointer" }} />
-        </button>
-      </Tooltip>
+      <ActionCell
+        handleDelete={handleDeleteModalOpen}
+        handleEdit={handleEditModalOpen}
+      />
       <Modal
         open={deleteModalIsOpen}
         aria-labelledby="modal-modal-title"

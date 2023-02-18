@@ -1,5 +1,3 @@
-import { updateTeachers } from "@helpers/updateTeachersFields";
-
 export type TeacherField =
   | "isValid"
   | "id"
@@ -52,7 +50,10 @@ export const addTeachersReducer = (
       const idx = state.teachers.findIndex((t) => t.id == id);
       if (idx == -1) {
         return {
-          teachers: [...state.teachers, action.payload],
+          teachers: [
+            ...state.teachers,
+            { ...action.payload, number: parseInt(action.payload, 10) },
+          ],
         };
       } else {
         const newTeachers = state.teachers;

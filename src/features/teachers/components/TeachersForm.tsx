@@ -1,5 +1,12 @@
 import Input from "@atoms/Input";
-import React, { Dispatch, FC, useState, useEffect, useId } from "react";
+import React, {
+  Dispatch,
+  FC,
+  useState,
+  useEffect,
+  useId,
+  useCallback,
+} from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { Tooltip } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +16,7 @@ import SelectOption from "@atoms/SelectOIption";
 import { Action, AddTeachersState } from "@reducers/teachers";
 import usePayload from "@hooks/usePayload";
 import { teachcersFormSchema } from "@utils/validations";
+import { subjectOptions } from "@utils/options";
 
 const schema = teachcersFormSchema;
 type FormData = yup.InferType<typeof schema>;
@@ -31,6 +39,7 @@ export const TeachersForm: FC<IProps> = ({
   //======================================================
   const [focused, setFocused] = useState<boolean>(false);
   const { instituteId } = usePayload();
+  console.log(instituteId);
 
   const {
     handleSubmit,
@@ -48,6 +57,7 @@ export const TeachersForm: FC<IProps> = ({
   //======================================================
 
   useEffect(() => {
+    console.log(getValues());
     const { firstName, lastName, cin, subject, email, number } = getValues();
     dispatch({
       type: "UPDATE_TEACHER",
@@ -123,11 +133,7 @@ export const TeachersForm: FC<IProps> = ({
               {...field}
               ref={null}
               placeholder="Matiere"
-              options={[
-                { value: "Mathémathique", label: "Mathémathique" },
-                { value: "Science", label: "Science" },
-                { value: "Physique", label: "Physique" },
-              ]}
+              options={subjectOptions}
               controlStyle={{ borderWidth: "0px" }}
               className={`${errors.subject ? " text-red-500" : ""}`}
             />

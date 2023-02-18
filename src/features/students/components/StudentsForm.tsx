@@ -9,6 +9,7 @@ import SelectOption from "@atoms/SelectOIption";
 import usePayload from "@hooks/usePayload";
 import { Action, AddStudentsState } from "@reducers/students";
 import { studentFormSchema } from "@utils/validations";
+import { levelOptions } from "@utils/options";
 
 const schema = studentFormSchema;
 
@@ -102,11 +103,7 @@ const StudentsForm: FC<IProps> = ({ setStudentsIDS, state, dispatch, id }) => {
               {...field}
               ref={null}
               placeholder="Niveau"
-              options={[
-                { value: "2éme science", label: "2éme science" },
-                { value: "3éme Mathématique", label: "3éme Mathématique" },
-                { value: "Bac economie", label: "Bac economie" },
-              ]}
+              options={levelOptions}
               controlStyle={{ borderWidth: "0px" }}
               className={`${errors.level ? " text-red-500" : ""} w-1/2`}
             />
@@ -127,3 +124,9 @@ const StudentsForm: FC<IProps> = ({ setStudentsIDS, state, dispatch, id }) => {
 };
 
 export default StudentsForm;
+
+/**
+ * inputs
+ * onDelete
+ *
+ */

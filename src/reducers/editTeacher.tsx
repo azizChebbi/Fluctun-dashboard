@@ -1,5 +1,3 @@
-import { updateTeachers } from "@helpers/updateTeachersFields";
-
 export type TeacherField =
   | "isValid"
   | "id"
