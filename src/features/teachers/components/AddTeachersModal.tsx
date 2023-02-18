@@ -1,11 +1,8 @@
 import React, { Reducer, useEffect, useReducer } from "react";
 import Modal from "@mui/material/Modal";
-import TeachersForm from "@molecules/TeachersForm";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import Button from "@atoms/Button";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ClipLoader from "react-spinners/ClipLoader";
-import { Tooltip } from "@mui/material";
 import {
   addTeachersInitialState,
   Action,
@@ -14,9 +11,11 @@ import {
   Teacher,
 } from "@reducers/teachers";
 import { useMutation } from "react-query";
-import { api } from "api";
 import { notifyError, notifySuccess } from "@utils/notify";
 import { queryClient } from "context/Provider";
+import { nanoid } from "nanoid";
+import { TeachersForm } from "./TeachersForm";
+import { registerTeachers } from "../api";
 
 const fields = ["Nom", "Prénom", "Cin", "Matiére", "Email", "Numéro"];
 
@@ -25,27 +24,37 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
-  const [data, setData] = React.useState<string[]>([]);
-  const [counter, setCounter] = React.useState(0);
+export const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
+  // ===================================================================
+  // state
+  // ===================================================================
+
+  const [teachersIDS, setTeachersIDS] = React.useState<string[]>([]);
   const [state, dispatch] = useReducer<Reducer<AddTeachersState, Action>>(
     addTeachersReducer,
     addTeachersInitialState
   );
 
+  // ===================================================================
+  // effect
+  // ===================================================================
+
   useEffect(() => {
-    // console.log(data.findIndex("3"));
     dispatch({
       type: "REMAIN_TEACHERS_WITH_IDS",
       payload: {
-        teachersIDS: data,
+        teachersIDS,
       },
     });
-  }, [data]);
+  }, [teachersIDS]);
+
+  // ===================================================================
+  // queries and mutations
+  // ===================================================================
 
   const createTeachers = useMutation(
     "create-teachers",
-    () => api.post("/auth/register-teachers", state.teachers),
+    () => registerTeachers(state.teachers),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["teachers"]);
@@ -56,18 +65,21 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
         notifyError(
           "Un erreur c'est produite, ca peut étre une duplication des emails ou des cin ou des champs invalides"
         );
-        // mutation.reset();
       },
     }
   );
+
+  // ===================================================================
+  // handlers
+  // ===================================================================
+
   const handleClose = () => {
     setOpen(false);
     dispatch({
       type: "DELETE_TEACHERS",
       payload: null as unknown as Teacher,
     });
-    setCounter(0);
-    setData([]);
+    setTeachersIDS([]);
   };
 
   const isAllFieldsAreValid = () => {
@@ -79,24 +91,17 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
   };
 
   const addForm = () => {
-    setCounter(counter + 1);
+    const newId = nanoid();
+    setTeachersIDS((prev) => [...prev, newId]);
   };
 
   const handleValidation = () => {
     createTeachers.mutate();
-    // const { data, isSuccess, isError } = mutation;
-    // console.log(mutation);
-    // if (isSuccess || data) {
-    //   handleClose();
-    //   notifySuccess("Les enseignants sont ajoutés avec succées");
-    // }
-    // if (isError) {
-    //   notifyError(
-    //     "Un erreur c'est produite, ca peut étre une duplication des emails ou des cin ou des champs invalides"
-    //   );
-    //   mutation.reset();
-    // }
   };
+
+  // ===================================================================
+  // ui
+  // ===================================================================
 
   return (
     <div>
@@ -116,17 +121,17 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
               </p>
             ))}
           </div>
-          {[...Array(counter).keys()].map((id) => (
+          {teachersIDS.map((id) => (
             <div key={id} className=" relative">
               <TeachersForm
-                setData={setData}
-                setCounter={setCounter}
+                id={id}
+                setTeachersIDS={setTeachersIDS}
                 state={state}
                 dispatch={dispatch}
               />
             </div>
           ))}
-          {data.length < 5 && (
+          {teachersIDS.length < 5 && (
             <button
               className=" text-[#D6D6D6] text-md font-semibold text-center  flex flex-col items-center justify-center m-auto mt-6"
               onClick={addForm}
@@ -166,4 +171,4 @@ const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
   );
 };
 
-export default TeachersModal;
+// export default TeachersModal;

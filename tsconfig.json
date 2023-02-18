@@ -28,7 +28,8 @@
       "@utils/*": ["utils/*"],
       "@store/*": ["store/*"],
       "@reducers/*": ["reducers/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@features/*": ["features/*"]
     }
   },
   "include": ["src"],

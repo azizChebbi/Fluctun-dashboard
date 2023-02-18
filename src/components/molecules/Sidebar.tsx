@@ -7,7 +7,7 @@ import open from "../../assets/icons/openSidebar.svg";
 import close from "../../assets/icons/closeSidebar.svg";
 import { FC } from "react";
 import { Auth, useAuth } from "context/auth-context";
-import usePathname from "@helpers/usePathname";
+import usePathname from "@hooks/usePathname";
 
 interface IProps {
   sidebarIsSmall: boolean;
@@ -16,9 +16,6 @@ interface IProps {
 
 const Sidebar: FC<IProps> = ({ sidebarIsSmall, setSidebarIsSmall }) => {
   const { logout } = useAuth() as unknown as Auth;
-  const isActiveLink = (path: string) => {
-    return path == window.location.pathname;
-  };
   return (
     <div className=" h-screen overflow-hidden">
       <div className=" m-auto h-full grid grid-rows-[20%_1fr_30%] ">

@@ -8,112 +8,44 @@ import * as yup from "yup";
 import SelectOption from "@atoms/SelectOIption";
 import { Action, AddTeachersState } from "@reducers/teachers";
 import usePayload from "@hooks/usePayload";
+import { teachcersFormSchema } from "@utils/validations";
 
-const schema = yup
-  .object({
-    firstName: yup.string().min(3).required(),
-    lastName: yup.string().min(3).required(),
-    cin: yup
-      .string()
-      .matches(/^\d+$/)
-      .min(8)
-      .max(8)
-      .required("Cin contains only numbers"),
-    subject: yup
-      .object()
-      .shape({
-        label: yup.string().required(),
-        value: yup.string().required(),
-      })
-      .required(),
-    email: yup.string().email().required(),
-    number: yup
-      .number()
-      .min(10000000, "Numéro doit étre valide")
-      .max(99999999, "Numéro doit étre valide")
-      .required(),
-  })
-  .required();
+const schema = teachcersFormSchema;
 type FormData = yup.InferType<typeof schema>;
 
 interface IProps {
-  setData: React.Dispatch<React.SetStateAction<string[]>>;
+  setTeachersIDS: React.Dispatch<React.SetStateAction<string[]>>;
   state: AddTeachersState;
   dispatch: Dispatch<Action>;
-  setCounter: Dispatch<React.SetStateAction<number>>;
+  id: string;
 }
 
-const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
+export const TeachersForm: FC<IProps> = ({
+  setTeachersIDS,
+  state,
+  dispatch,
+  id,
+}) => {
+  //======================================================
+  // state
+  //======================================================
   const [focused, setFocused] = useState<boolean>(false);
-  const id = useId();
   const { instituteId } = usePayload();
 
   const {
     handleSubmit,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isValid },
     register,
     getValues,
-    watch,
     control,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
-  const onDelete = async (e: any) => {
-    e.preventDefault();
-    // await deleteTeacherFromState();
-    setCounter((counter) => counter - 1);
-    setData((prevState) => {
-      const arr = prevState;
-      const ind = arr.lastIndexOf(id);
-      arr.splice(ind, 1);
-      return [...arr];
-    });
-  };
-
-  useEffect(() => {
-    const subscription = watch((data) => {
-      console.log(data, isValid);
-      const {
-        firstName = "",
-        lastName = "",
-        cin = "",
-        subject = "",
-        email = "",
-        number = 0,
-      } = data;
-      dispatch({
-        type: "UPDATE_TEACHER",
-        payload: {
-          id,
-          firstName,
-          lastName,
-          cin,
-          subject: subject?.value,
-          email,
-          number,
-          isValid,
-          instituteId,
-        },
-      });
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [isValid, watch]);
-
-  useEffect(() => {
-    setData((prev) => {
-      let arr = prev;
-      const index = arr.indexOf(id);
-      if (index == -1) {
-        return [...prev, id];
-      }
-      return [...prev];
-    });
-  }, [id]);
+  //======================================================
+  // effect
+  //======================================================
 
   useEffect(() => {
     const { firstName, lastName, cin, subject, email, number } = getValues();
@@ -131,9 +63,28 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
         instituteId,
       },
     });
-  }, [isValid]);
+  }, [getValues()]);
+
+  //======================================================
+  // handlers
+  //======================================================
+
+  const onDelete = async (e: any) => {
+    e.preventDefault();
+    // await deleteTeacherFromState();
+    setTeachersIDS((prevState) => {
+      const arr = prevState;
+      const ind = arr.lastIndexOf(id);
+      arr.splice(ind, 1);
+      return [...arr];
+    });
+  };
 
   const onSubmit = (data: FormData) => console.log(data);
+
+  //======================================================
+  // ui
+  //======================================================
 
   return (
     <form
@@ -146,22 +97,22 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
     >
       <Input
         placeholder="Nom"
-        register={register}
-        name="lastName"
-        className={`${errors.lastName ? " text-red-500" : ""}`}
+        errorMessage={errors.lastName?.message}
+        className={` border-0`}
+        registration={register("lastName")}
       />
 
       <Input
         placeholder="Prénom"
-        register={register}
-        name="firstName"
-        className={`${errors.firstName ? " text-red-500" : ""}`}
+        errorMessage={errors.firstName?.message}
+        className={`border-0`}
+        registration={register("firstName")}
       />
       <Input
         placeholder="Cin"
-        register={register}
-        name="cin"
-        className={`${errors.cin ? " text-red-500" : ""}`}
+        errorMessage={errors.cin?.message}
+        className={`border-0`}
+        registration={register("cin")}
       />
       <div className=" flex-1">
         <Controller
@@ -177,6 +128,7 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
                 { value: "Science", label: "Science" },
                 { value: "Physique", label: "Physique" },
               ]}
+              controlStyle={{ borderWidth: "0px" }}
               className={`${errors.subject ? " text-red-500" : ""}`}
             />
           )}
@@ -185,15 +137,15 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
       <Input
         type="email"
         placeholder="Email"
-        className={`${errors.email ? " text-red-500" : ""}`}
-        register={register}
-        name="email"
+        className={`border-0`}
+        errorMessage={errors.email?.message}
+        registration={register("email")}
       />
       <Input
         placeholder="Numéro"
-        className={`${errors.number ? " text-red-500" : ""}`}
-        register={register}
-        name="number"
+        className={`border-0`}
+        errorMessage={errors.number?.message}
+        registration={register("number")}
       />
       <button
         className=" absolute top-1/2 transform -translate-y-1/2 right-12"
@@ -207,4 +159,4 @@ const TeachersForm: FC<IProps> = ({ setData, state, dispatch, setCounter }) => {
   );
 };
 
-export default TeachersForm;
+// export default TeachersForm;

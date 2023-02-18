@@ -2,27 +2,22 @@ import React, { useState } from "react";
 import logo from "@icons/logo.svg";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { Auth, useAuth } from "context/auth-context";
 import "react-toastify/dist/ReactToastify.css";
+import { loginSchema } from "@utils/validations";
 
 interface IFormInputs {
   email: string;
   password: string;
 }
 
-const schema = yup
-  .object({
-    email: yup.string().email("email must be valid").required(),
-    password: yup.string().min(8).required("Please Enter your password"),
-    // .matches(
-    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-    //   "must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
-    // ),
-  })
-  .required();
+const schema = loginSchema;
 
 const Login = () => {
+  // ==================================================
+  // state
+  // ==================================================
+
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth() as unknown as Auth;
   const {
@@ -32,7 +27,15 @@ const Login = () => {
   } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
   });
+
+  // ==================================================
+  // handler
+  // ==================================================
   const onSubmit = (data: IFormInputs) => login(data);
+
+  // ==================================================
+  // ui
+  // ==================================================
   return (
     <div className=" w-full min-h-screen">
       <div className="  py-10 border-b-2 border-[#AFAFAF]">

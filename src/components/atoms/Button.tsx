@@ -22,26 +22,22 @@ const Button: FC<IProps> = ({
     <button
       style={{
         color: outlined ? color || "#142B33" : "white",
-        background: outlined ? "white" : color || "#142B33",
-        borderColor: color || "#142B33",
+        background: disabled
+          ? "#9CA3AF"
+          : outlined
+          ? "white"
+          : color || "#142B33",
+        borderColor: disabled ? "#9CA3AF" : color || "#142B33",
       }}
       className={` border-[1px]
-      text-base font-semibold rounded py-3 px-8 text-center outline-none ${
-        disabled ? "cursor-not-allowed bg-gray-400" : ""
-      } ${className}`}
+    text-base font-semibold rounded py-3 px-8 text-center outline-none ${
+      disabled ? "cursor-not-allowed bg-gray-400" : ""
+    } ${className}`}
       {...props}
     >
       {children}
     </button>
   );
 };
-
-// ${
-//   outlined
-//     ? `text-${color ? `${color}` : "blue"} bg-white border-[1px] border-${
-//         color ? `${color}` : "blue"
-//       }`
-//     : `text-white bg-${color ? `${color}` : "blue"} border-none`
-// }
 
 export default Button;

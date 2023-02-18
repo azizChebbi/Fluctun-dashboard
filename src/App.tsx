@@ -1,11 +1,11 @@
-import useAccessToken from "@hooks/useAccessToken";
 import Wrapper from "@layouts/Wrapper";
 import { NotifyContainer } from "@utils/notify";
-import AuthenticatedApp from "AuthenticatedApp";
-import UnauthenticatedApp from "UnauthenticatedApp";
+import AuthenticatedApp from "./routes/AuthenticatedApp";
+import { Auth, useAuth } from "context/auth-context";
+import UnauthenticatedApp from "./routes/UnauthenticatedApp";
 
 function App() {
-  const { token } = useAccessToken();
+  const { token } = useAuth() as unknown as Auth;
 
   return (
     <div className="App">

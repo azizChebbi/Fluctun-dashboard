@@ -1,4 +1,4 @@
-import { InfoLine } from "@organisms/TeacherInformation";
+import { InfoLine } from "features/teachers/components/TeacherInformation";
 import React, { FC } from "react";
 
 interface IProps {

@@ -2,13 +2,7 @@ import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./auth-context";
 import { ReactQueryDevtools } from "react-query/devtools";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 export const queryClient = new QueryClient();
 

@@ -2,8 +2,8 @@ import FullPageSpinner from "@pages/FullPageSpinner";
 import { api } from "api";
 import axios from "axios";
 import * as React from "react";
-import { redirect } from "react-router-dom";
 import { notifyError } from "@utils/notify";
+import useLocalStorage from "@hooks/useLocalstorage";
 
 const AuthContext = React.createContext(null);
 AuthContext.displayName = "AuthContext";
@@ -12,19 +12,20 @@ export type Auth = {
   login: ({ email, password }: { email: string; password: string }) => void;
   register: () => void;
   logout: () => void;
+  token: string;
+  setToken: any;
 };
 
 function AuthProvider(props: any) {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [token, setToken] = useLocalStorage("at", null);
 
   async function getAccessToken() {
     try {
       const res = await api.post("/auth/refresh");
       localStorage.setItem("at", JSON.stringify(res.data.access_token));
-      return redirect("/");
     } catch (error) {
-      logout();
-      console.log(error);
+      setToken(null);
     } finally {
       setIsLoading(false);
     }
@@ -45,8 +46,7 @@ function AuthProvider(props: any) {
           },
           { withCredentials: true }
         );
-        localStorage.setItem("at", JSON.stringify(res.data.access_token));
-        window.location.reload();
+        setToken(res.data.access_token);
       } catch (error: any) {
         if (error.code == "ERR_NETWORK")
           notifyError("Une erreur s'est produite, essayez plus tard");
@@ -57,20 +57,18 @@ function AuthProvider(props: any) {
   );
   const register = React.useCallback(() => {}, []);
   const logout = React.useCallback(async () => {
-    localStorage.removeItem("at");
+    console.log("clicked");
     try {
       await api.post("/auth/logout");
-      window.location.replace("http://localhost:3000/login");
+      setToken(null);
     } catch (error) {
       notifyError("Error has occured, try to refresh the page");
     }
-    // window.location.reload();
-    // redirect("/logout");
   }, []);
 
   const value = React.useMemo(
-    () => ({ login, logout, register }),
-    [login, logout, register]
+    () => ({ login, logout, register, token, setToken }),
+    [login, logout, register, token, setToken]
   );
 
   return isLoading ? (

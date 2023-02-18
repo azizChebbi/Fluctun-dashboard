@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import Tooltip from "@mui/material/Tooltip";
@@ -12,18 +6,18 @@ import { useMutation, useQuery } from "react-query";
 import { api } from "api";
 import { queryClient } from "context/Provider";
 import Modal from "@mui/material/Modal";
-import Button from "./Button";
+import Button from "../../../components/atoms/Button";
 import { FullTeacherData } from "@helpers/generateTables";
 import { notifyError, notifySuccess } from "@utils/notify";
 import ClipLoader from "react-spinners/ClipLoader";
-import TeacherInformation from "@organisms/TeacherInformation";
+import { TeacherInformation } from "@features/teachers";
 
 interface IProps {
   id: string;
   onEditClick?: Dispatch<SetStateAction<boolean>>;
 }
 
-const TeacherActionCell: FC<IProps> = ({ id }) => {
+const StudentActionCell: FC<IProps> = ({ id }) => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState<boolean>(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [teacher, setTeacher] = useState<FullTeacherData | null>(null);
@@ -72,7 +66,7 @@ const TeacherActionCell: FC<IProps> = ({ id }) => {
     deleteTeacher.mutate();
   };
   return (
-    <div className=" flex items-center justify-center gap-2">
+    <div className=" flex items-center justify-center gap-4">
       <Tooltip title="delete">
         <button onClick={handleDeleteModalOpen}>
           <DeleteOutlineOutlinedIcon
@@ -114,11 +108,11 @@ const TeacherActionCell: FC<IProps> = ({ id }) => {
         aria-describedby="modal-modal-description"
       >
         <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[65%] rounded">
-          <TeacherInformation id={id} />
+          <TeacherInformation id={id} handleClose={handleEditModalClose} />
         </div>
       </Modal>
     </div>
   );
 };
 
-export default TeacherActionCell;
+export default StudentActionCell;

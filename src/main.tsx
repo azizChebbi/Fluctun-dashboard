@@ -1,6 +1,4 @@
-// import AppProviders from "provider";
 import { AppProviders } from "context/Provider";
-import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";

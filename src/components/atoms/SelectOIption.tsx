@@ -6,27 +6,12 @@ interface Option {
   value: string;
 }
 
-const customStyles = {
-  option: (defaultStyles: any, state: any) => ({
-    ...defaultStyles,
-    color: state.isSelected ? "#000" : "#667085",
-  }),
-
-  control: (defaultStyles: any) => ({
-    ...defaultStyles,
-    border: "none",
-    boxShadow: "none",
-    borderRadius: "8px",
-    // width: "150px",
-  }),
-  singleValue: (defaultStyles: any) => ({ ...defaultStyles, color: "#000" }),
-};
-
 interface IProps {
   options: Option[];
   className?: string;
   placeholder?: string;
   isMulti?: boolean;
+  controlStyle?: any;
   onChange?: (e: any) => void;
 }
 
@@ -34,8 +19,22 @@ const SelectOption: FC<IProps> = ({
   options,
   className,
   onChange,
+  controlStyle,
   ...props
 }) => {
+  const customStyles = {
+    option: (defaultStyles: any, state: any) => ({
+      ...defaultStyles,
+      color: state.isSelected ? "#000" : "#667085",
+    }),
+
+    control: (defaultStyles: any) => ({
+      ...defaultStyles,
+      boxShadow: "none",
+      ...controlStyle,
+    }),
+    singleValue: (defaultStyles: any) => ({ ...defaultStyles, color: "#000" }),
+  };
   return (
     <Select
       components={{

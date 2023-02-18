@@ -1,20 +1,24 @@
 import Button from "@atoms/Button";
 import { mapTeachersDataToColumns } from "@helpers/generateTables";
-import TeachersModal from "@organisms/TeachersModal";
-import TeachersTable from "@organisms/TeachersTable";
 import { api } from "api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { TeachersModal, Table } from "@features/teachers";
+import { getTeachers } from "@features/teachers/api";
+import { teachersColumns } from "@utils/columns";
 
-const Enseignants = () => {
+const Teachers = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { isLoading, isError, data, error } = useQuery("teachers", () =>
-    api.get("/admin/teachers")
-  );
+  const { isLoading, isError, data, error } = useQuery("teachers", getTeachers);
+
   return (
     <div className=" h-full flex flex-col justify-center">
       <p className=" text-blue text-2xl font-semibold mb-6">Enseignants</p>
-      <TeachersTable rows={mapTeachersDataToColumns(data ? data.data : [])} />
+      <Table
+        rows={mapTeachersDataToColumns(data ? data.data : [])}
+        columns={teachersColumns}
+        noRowsIndicator={"Ajouter des enseignants"}
+      />
       <Button className=" ml-auto mt-6" onClick={() => setOpen(true)}>
         Ajouter des enseignants
       </Button>
@@ -23,4 +27,4 @@ const Enseignants = () => {
   );
 };
 
-export default Enseignants;
+export default Teachers;
