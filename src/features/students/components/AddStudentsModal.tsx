@@ -16,6 +16,7 @@ import {
   addStudentsReducer,
   AddStudentsState,
 } from "@reducers/students";
+import AddMoreButton from "@atoms/AddMoreButton";
 
 const fields = ["Nom", "Prénom", "Code d'inscription", "Niveau"];
 
@@ -110,15 +111,7 @@ const AddStudentsModal: React.FC<IProps> = ({ open, setOpen }) => {
               />
             </div>
           ))}
-          {studentsIDS.length < 5 && (
-            <button
-              className=" text-[#D6D6D6] text-md font-semibold text-center  flex flex-col items-center justify-center m-auto mt-6"
-              onClick={addForm}
-            >
-              <AddCircleOutlineOutlinedIcon sx={{ color: "#D6D6D6" }} />
-              <span>Ajouter encore</span>
-            </button>
-          )}
+          {studentsIDS.length < 5 && <AddMoreButton handleClick={addForm} />}
           <div className=" w-max flex items-center justify-center gap-8 ml-auto mt-6 mr-16">
             {createStudents.isLoading ? (
               <ClipLoader color="#142B33" />

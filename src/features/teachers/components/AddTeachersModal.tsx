@@ -16,6 +16,9 @@ import { queryClient } from "context/Provider";
 import { nanoid } from "nanoid";
 import { TeachersForm } from "./TeachersForm";
 import { registerTeachers } from "../api";
+import AddMoreButton from "@atoms/AddMoreButton";
+import Loader from "@atoms/Loader";
+import { isAllFormsAreValid } from "@utils/isAllFormsAreValid";
 
 const fields = ["Nom", "Prénom", "Cin", "Matiére", "Email", "Numéro"];
 
@@ -82,14 +85,6 @@ export const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
     setTeachersIDS([]);
   };
 
-  const isAllFieldsAreValid = () => {
-    const teachers = state.teachers;
-    for (let i = 0; i < teachers.length; i++) {
-      if (!teachers[i].isValid) return false;
-    }
-    return true;
-  };
-
   const addForm = () => {
     const newId = nanoid();
     setTeachersIDS((prev) => [...prev, newId]);
@@ -131,25 +126,19 @@ export const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
               />
             </div>
           ))}
-          {teachersIDS.length < 5 && (
-            <button
-              className=" text-[#D6D6D6] text-md font-semibold text-center  flex flex-col items-center justify-center m-auto mt-6"
-              onClick={addForm}
-            >
-              <AddCircleOutlineOutlinedIcon sx={{ color: "#D6D6D6" }} />
-              <span>Ajouter encore</span>
-            </button>
-          )}
+          {teachersIDS.length < 5 && <AddMoreButton handleClick={addForm} />}
           <div className=" w-max flex items-center justify-center gap-8 ml-auto mt-6 mr-16">
-            {createTeachers.isLoading ? (
-              <ClipLoader color="#142B33" />
-            ) : (
+            <Loader
+              isLoading={createTeachers.isLoading}
+              loader={<ClipLoader color="#142B33" />}
+            >
               <Button
                 className={`py-2 px-12 ${
-                  isAllFieldsAreValid() ? "" : " bg-gray-400"
+                  isAllFormsAreValid(state.teachers) ? "" : " bg-gray-400"
                 }`}
                 disabled={
-                  !isAllFieldsAreValid() || state.teachers.length == 0
+                  !isAllFormsAreValid(state.teachers) ||
+                  state.teachers.length == 0
                     ? true
                     : false
                 }
@@ -157,7 +146,7 @@ export const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
               >
                 Valider
               </Button>
-            )}
+            </Loader>
             <button
               className=" text-blue font-semibold underline underline-offset-1"
               onClick={handleClose}
@@ -170,5 +159,3 @@ export const TeachersModal: React.FC<IProps> = ({ open, setOpen }) => {
     </div>
   );
 };
-
-// export default TeachersModal;

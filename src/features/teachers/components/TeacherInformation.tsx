@@ -1,5 +1,7 @@
 import Button from "@atoms/Button";
+import Loader from "@atoms/Loader";
 import { FullTeacherData } from "@helpers/generateTables";
+import Profile from "@molecules/Profile";
 import StaticInformation from "@molecules/StaticInformation";
 import {
   Action,
@@ -106,27 +108,15 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
   //======================================================
   return (
     <div className=" grid grid-cols-[300px_1fr] relative">
-      <div className=" relative border-r-2 border-[#F2F2F2] p-8 py-16">
-        <div
-          className={` ${
-            editMode ? "block" : "hidden"
-          } absolute top-0 left-0 w-full h-full bg-[rgba(255,255,255,0.6)]`}
-        ></div>
-        <div className=" rounded-[50%] w-max overflow-hidden m-auto mb-10">
-          <img
-            src="https://content.fortune.com/wp-content/uploads/2023/02/GettyImages-1229894905-e1676063484430.jpg"
-            className=" w-60 h-60 object-cover"
-            alt="teacher"
-          />
-        </div>
-        <p className=" text-base text-text leading-6">{teacher?.bio}</p>
-        <div className=" mt-10">
-          <p className=" text-blue font-medium mb-2">
-            Nombre totale de réponses :
-          </p>
-          <p className=" text-blue text-sm">4 reponses </p>
-        </div>
-      </div>
+      <Profile
+        editMode={editMode}
+        url={
+          "https://content.fortune.com/wp-content/uploads/2023/02/GettyImages-1229894905-e1676063484430.jpg"
+        }
+        bio={teacher?.bio}
+        nbResponses={5}
+        isTeacher
+      />
       <div className=" p-16">
         {editMode ? (
           <EditTeacherInformation
@@ -144,13 +134,14 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
         )}
         <div className=" flex gap-2 absolute bottom-8 right-8">
           {editMode ? (
-            !updateTeacher.isLoading ? (
+            <Loader
+              isLoading={updateTeacher.isLoading}
+              loader={<ClipLoader color="#142B33" />}
+            >
               <Button onClick={handleUpdate} disabled={!state.teacher?.isValid}>
                 Enregistrer
               </Button>
-            ) : (
-              <ClipLoader color="#142B33" />
-            )
+            </Loader>
           ) : (
             <Button onClick={() => setEditMode(true)}>Editer</Button>
           )}
@@ -162,5 +153,3 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
     </div>
   );
 };
-
-// export default TeacherInformation;
