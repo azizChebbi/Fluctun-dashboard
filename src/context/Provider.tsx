@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./auth-context";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { NotifyContainer } from "@utils/notify";
 
 export const queryClient = new QueryClient();
 
@@ -13,12 +14,13 @@ interface IProps {
 const AppProviders: React.FC<IProps> = ({ children }) => {
   return (
     <Router>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <NotifyContainer />
+        <AuthProvider>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </Router>
   );
 };

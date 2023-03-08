@@ -1,34 +1,26 @@
 import Button from "@atoms/Button";
 import Loader from "@atoms/Loader";
-import { FullTeacherData } from "@helpers/generateTables";
+import { FullStudentData, FullTeacherData } from "@helpers/generateTables";
 import Profile from "@molecules/Profile";
 import StaticInformation from "@molecules/StaticInformation";
 import {
   Action,
-  editTeacherInitialState,
-  editTeacherReducer,
-  EditTeacherState,
-  Teacher,
-} from "@reducers/editTeacher";
+  editStudentInitialState,
+  editStudentReducer,
+  EditStudentState,
+} from "@reducers/editStudent";
+
+import { Student } from "@reducers/students";
 import { notifyError, notifySuccess } from "@utils/notify";
 import { queryClient } from "context/Provider";
 import { FC, ReactNode, useReducer, useState, Reducer } from "react";
 import { useMutation, useQuery } from "react-query";
 import ClipLoader from "react-spinners/ClipLoader";
-import { getTeachers, updateTeacher as updateTeacherMutation } from "../api";
-import { EditTeacherInformation } from "./EditTeacherInformation";
+import { getStudents, updateStudent as updateStudentMutation } from "../api";
+import { EditStudentInformation } from "./EditStudentInformation";
 import profileImg from "@images/profile.svg";
 
-type Label =
-  | "Nom"
-  | "Prénom"
-  | "CIN"
-  | "Code"
-  | "Matiére"
-  | "Niveau"
-  | "Numéro"
-  | "Email"
-  | "Bio";
+type Label = "Nom" | "Prénom" | "Code" | "Niveau" | "Email" | "Bio";
 
 export type InfoLine = {
   label: Label;
@@ -40,38 +32,36 @@ interface IProps {
   handleClose: () => void;
 }
 
-export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
+export const StudentInformation: FC<IProps> = ({ id, handleClose }) => {
   //==================================================================
   // state
   //==================================================================
-  const [teacher, setTeacher] = useState<FullTeacherData | null>(null);
+  const [student, setStudent] = useState<FullStudentData | null>(null);
   const [informations, setInformations] = useState<InfoLine[]>(() => {
     return [];
   });
   const [editMode, setEditMode] = useState(false);
-  const [state, dispatch] = useReducer<Reducer<EditTeacherState, Action>>(
-    editTeacherReducer,
-    editTeacherInitialState
+  const [state, dispatch] = useReducer<Reducer<EditStudentState, Action>>(
+    editStudentReducer,
+    editStudentInitialState
   );
 
   //==================================================================
-  // ======================= QUERIES AND MUTATIONS ===================
+  // queries and mutations
   //==================================================================
-  const { data } = useQuery("teachers", getTeachers, {
+  const { data } = useQuery("students", getStudents, {
     onSuccess: () => {
-      const teacher: FullTeacherData = data?.data.find(
-        (t: FullTeacherData) => t.id == id
-      ) as FullTeacherData;
-      console.log("teacher", teacher);
-      setTeacher(teacher);
+      const student: FullStudentData = data?.data.find(
+        (t: FullStudentData) => t.id == id
+      ) as FullStudentData;
+      setStudent(student);
       setInformations(() => {
         const arr: InfoLine[] = [
-          { label: "Nom", value: teacher.lastName },
-          { label: "Prénom", value: teacher.firstName },
-          { label: "CIN", value: teacher.cin },
-          { label: "Matiére", value: teacher.subject },
-          { label: "Numéro", value: teacher.number },
-          { label: "Email", value: teacher.email },
+          { label: "Nom", value: student.lastName },
+          { label: "Prénom", value: student.firstName },
+          { label: "Code", value: student.code },
+          { label: "Niveau", value: student.level },
+          { label: "Email", value: student.email },
         ];
         return arr;
       });
@@ -80,15 +70,15 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
       notifyError("Error has occured, try again");
     },
   });
-  const updateTeacher = useMutation(
-    "updateTeacher",
+  const updateStudent = useMutation(
+    "updateStudent",
     () => {
-      const { isValid, ...data } = state.teacher as Teacher;
-      return updateTeacherMutation({ ...data, id });
+      const { isValid, ...data } = state.student as Student;
+      return updateStudentMutation({ ...data, id });
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("teachers");
+        queryClient.invalidateQueries("students");
         notifySuccess("L'enseignant est modifié avec succées");
         handleClose();
       },
@@ -99,7 +89,7 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
   );
 
   //==================================================================
-  // ======================= HANDLERS ===============================
+  // handlers
   //==================================================================
 
   const getValueFromInformationsByLabel = (label: Label) => {
@@ -111,30 +101,29 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
       return "Lorem ipsum dolor sit amet consectetur. Potenti arcu vel praesent ac rhoncus. Rhoncus ut semper amet amet. Sed molestie vestibulum urna varius amet tellus. Sit viverra viverra sed dolor penatibus maecenas elementum.";
   };
   const handleUpdate = () => {
-    updateTeacher.mutate();
+    updateStudent.mutate();
   };
 
   //======================================================
-  // ======================= UI ======================
+  // ui
   //======================================================
   return (
     <div className=" grid grid-cols-[300px_1fr] relative">
       <Profile
         editMode={editMode}
-        url={teacher?.photo || profileImg}
-        bio={teacher?.bio}
-        nbResponses={teacher?.answers.length}
-        isTeacher
+        url={student?.photo || profileImg}
+        bio={student?.bio}
+        nbQuestions={student?.questions.length}
+        isTeacher={false}
       />
       <div className=" p-16">
         {editMode ? (
-          <EditTeacherInformation
+          <EditStudentInformation
             firstName={getValueFromInformationsByLabel("Prénom") as string}
             lastName={getValueFromInformationsByLabel("Nom") as string}
-            cin={getValueFromInformationsByLabel("CIN") as string}
+            code={getValueFromInformationsByLabel("Code") as string}
             email={getValueFromInformationsByLabel("Email") as string}
-            subject={getValueFromInformationsByLabel("Matiére") as string}
-            number={getValueFromInformationsByLabel("Numéro") as number}
+            level={getValueFromInformationsByLabel("Niveau") as string}
             state={state}
             dispatch={dispatch}
           />
@@ -144,10 +133,10 @@ export const TeacherInformation: FC<IProps> = ({ id, handleClose }) => {
         <div className=" flex gap-2 absolute bottom-8 right-8">
           {editMode ? (
             <Loader
-              isLoading={updateTeacher.isLoading}
+              isLoading={updateStudent.isLoading}
               loader={<ClipLoader color="#142B33" />}
             >
-              <Button onClick={handleUpdate} disabled={!state.teacher?.isValid}>
+              <Button onClick={handleUpdate} disabled={!state.student?.isValid}>
                 Enregistrer
               </Button>
             </Loader>

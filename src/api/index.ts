@@ -1,5 +1,13 @@
 import axios from "axios";
-import { getAccessToken } from "context/index";
+
+export const getAccessToken = () => {
+  const sat = localStorage.getItem("ata");
+  if (typeof sat == "string" && sat.length != 0) {
+    const at: string = JSON.parse(sat);
+    return at;
+  }
+  return null;
+};
 
 export const api = axios.create({
   baseURL: "http://localhost:9000",
@@ -10,6 +18,9 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const access_token = getAccessToken();
+    // const access_token =
+    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTY0OTZkYTdlNmRmNTQzMDFjNGJlNSIsInJvbGUiOiJzdXBlci1hZG1pbiIsImluc3RpdHV0ZUlkIjoiNjNjZDVjMzFjODY4NmVkNDkzMmIxOWQzIiwiaWF0IjoxNjc3MjQ2ODQ1LCJleHAiOjE2NzcyNDY5MDV9._NjVu44VSxRg8DdzeTyAUyd6lhj9-_9uYTX2Jy8B-kg";
+    console.log(access_token);
     if (access_token) {
       config.headers["Authorization"] = `Bearer ${access_token}`;
     }
@@ -19,33 +30,3 @@ api.interceptors.request.use(
     Promise.reject(err);
   }
 );
-
-// // add a response interceptor
-// api.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     const originalRequest = error.config;
-//     console.log(originalRequest.url);
-//     if (
-//       error.response.status === 401
-//       //   &&
-//       //   originalRequest.url === "http://localhost:9000/auth/refresh"
-//     ) {
-//       return Promise.reject(error);
-//     }
-
-//     if (error.response.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-//       return api
-//         .post("/auth/refresh", { withCredentials: true })
-//         .then((res) => {
-//           if (res.status === 201) {
-//             // payload: res.data.access_token,
-//             localStorage.setItem("at", JSON.stringify(res.data.access_token));
-//             return api(originalRequest);
-//           }
-//         });
-//     }
-//     return Promise.reject(error);
-//   }
-// );

@@ -39,7 +39,6 @@ const StudentsForm: FC<IProps> = ({ setStudentsIDS, state, dispatch, id }) => {
 
   const onDelete = async (e: any) => {
     e.preventDefault();
-    // await deleteTeacherFromState();
     setStudentsIDS((prevState) => {
       const arr = prevState;
       const ind = arr.lastIndexOf(id);
@@ -49,7 +48,7 @@ const StudentsForm: FC<IProps> = ({ setStudentsIDS, state, dispatch, id }) => {
   };
 
   useEffect(() => {
-    const { firstName, lastName, code, level } = getValues();
+    const { firstName, lastName, code, level, email } = getValues();
     dispatch({
       type: "UPDATE_STUDENT",
       payload: {
@@ -57,6 +56,7 @@ const StudentsForm: FC<IProps> = ({ setStudentsIDS, state, dispatch, id }) => {
         firstName,
         lastName,
         code,
+        email,
         level: level?.value,
         isValid,
         instituteId,
@@ -105,11 +105,17 @@ const StudentsForm: FC<IProps> = ({ setStudentsIDS, state, dispatch, id }) => {
               placeholder="Niveau"
               options={levelOptions}
               controlStyle={{ borderWidth: "0px" }}
-              className={`${errors.level ? " text-red-500" : ""} w-1/2`}
+              className={`${errors.level ? " text-red-500" : ""}`}
             />
           )}
         />
       </div>
+      <Input
+        placeholder="Email"
+        errorMessage={errors.email?.message}
+        className={`border-0`}
+        registration={register("email")}
+      />
 
       <button
         className=" absolute top-1/2 transform -translate-y-1/2 right-12"

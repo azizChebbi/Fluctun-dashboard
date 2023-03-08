@@ -1,14 +1,15 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { api } from "api";
 import { queryClient } from "context/Provider";
 import Modal from "@mui/material/Modal";
 import Button from "../../../components/atoms/Button";
-import { FullTeacherData } from "@helpers/generateTables";
+import { FullStudentData, FullTeacherData } from "@helpers/generateTables";
 import { notifyError, notifySuccess } from "@utils/notify";
 import ClipLoader from "react-spinners/ClipLoader";
 import { TeacherInformation } from "@features/teachers";
 import ActionCell from "@atoms/ActionCell";
+import { StudentInformation } from "./StudentInformation";
 
 interface IProps {
   id: string;
@@ -16,37 +17,40 @@ interface IProps {
 }
 
 const StudentActionCell: FC<IProps> = ({ id }) => {
+  //======================================================
+  // state
+  //======================================================
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState<boolean>(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [teacher, setTeacher] = useState<FullTeacherData | null>(null);
-  const { isLoading, isError, data, error } = useQuery(
-    "teachers",
-    () => api.get("/admin/teachers"),
+  const [student, setStudent] = useState<FullStudentData | null>(null);
+
+  //======================================================
+  // queries and mutations
+  //======================================================
+  const { data } = useQuery("students", () => api.get("/admin/students"), {
+    onSuccess: () => {
+      setStudent(() => {
+        return data?.data.find((t: FullStudentData) => t.id == id);
+      });
+    },
+  });
+  const deleteStudent = useMutation(
+    "delete-student",
+    () => api.delete(`/admin/student?id=${id}`),
     {
       onSuccess: () => {
-        setTeacher(() => {
-          return data?.data.find((t: FullTeacherData) => t.id == id);
-        });
-      },
-    }
-  );
-  const deleteTeacher = useMutation(
-    "delete-teacher",
-    () => api.delete(`/admin/teacher?id=${id}`),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("teachers");
-        notifySuccess("teacher is deleted successfully");
+        queryClient.invalidateQueries("students");
+        notifySuccess("student is deleted successfully");
       },
       onError: () => {
         notifyError("Error has occured, try later");
       },
     }
   );
-  useEffect(() => {
-    console.log(id);
-  }, []);
 
+  //======================================================
+  // handlers
+  //======================================================
   const handleDeleteModalClose = () => {
     setDeleteModalIsOpen(false);
   };
@@ -61,7 +65,7 @@ const StudentActionCell: FC<IProps> = ({ id }) => {
   };
 
   const handleDelete = () => {
-    deleteTeacher.mutate();
+    deleteStudent.mutate();
   };
   return (
     <div className=" flex items-center justify-center gap-4">
@@ -76,10 +80,10 @@ const StudentActionCell: FC<IProps> = ({ id }) => {
       >
         <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-12 rounded">
           <p className=" text-xl font-medium mb-4">{`Etes-vous sûr de supprimer l'enseignant ${
-            teacher?.firstName + " " + teacher?.lastName
-          } avec cin ${teacher?.cin}?`}</p>
+            student?.firstName + " " + student?.lastName
+          } avec cin ${student?.code}?`}</p>
           <div className=" flex gap-4">
-            {deleteTeacher.isLoading ? (
+            {deleteStudent.isLoading ? (
               <ClipLoader color="#EF4444" />
             ) : (
               <Button color="#EF4444" onClick={handleDelete}>
@@ -98,7 +102,7 @@ const StudentActionCell: FC<IProps> = ({ id }) => {
         aria-describedby="modal-modal-description"
       >
         <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[65%] rounded">
-          <TeacherInformation id={id} handleClose={handleEditModalClose} />
+          <StudentInformation id={id} handleClose={handleEditModalClose} />
         </div>
       </Modal>
     </div>

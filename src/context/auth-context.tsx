@@ -5,25 +5,25 @@ import * as React from "react";
 import { notifyError } from "@utils/notify";
 import useLocalStorage from "@hooks/useLocalstorage";
 
-const AuthContext = React.createContext(null);
+const AuthContext = React.createContext<Auth | null>(null);
 AuthContext.displayName = "AuthContext";
 
 export type Auth = {
   login: ({ email, password }: { email: string; password: string }) => void;
-  register: () => void;
   logout: () => void;
-  token: string;
+  token: string | null;
   setToken: any;
 };
 
 function AuthProvider(props: any) {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [token, setToken] = useLocalStorage("at", null);
+  const [token, setToken] = useLocalStorage<string | null>("ata", null);
 
   async function getAccessToken() {
     try {
       const res = await api.post("/auth/refresh");
-      localStorage.setItem("at", JSON.stringify(res.data.access_token));
+      console.log(res);
+      setToken(res.data.access_token);
     } catch (error) {
       setToken(null);
     } finally {
@@ -38,14 +38,10 @@ function AuthProvider(props: any) {
   const login = React.useCallback(
     async ({ email, password }: { email: string; password: string }) => {
       try {
-        const res = await axios.post(
-          "http://localhost:9000/auth/loginAdmin",
-          {
-            email,
-            password,
-          },
-          { withCredentials: true }
-        );
+        const res = await api.post("/auth/loginAdmin", {
+          email,
+          password,
+        });
         setToken(res.data.access_token);
       } catch (error: any) {
         if (error.code == "ERR_NETWORK")
@@ -55,9 +51,8 @@ function AuthProvider(props: any) {
     },
     []
   );
-  const register = React.useCallback(() => {}, []);
+
   const logout = React.useCallback(async () => {
-    console.log("clicked");
     try {
       await api.post("/auth/logout");
       setToken(null);
@@ -66,9 +61,9 @@ function AuthProvider(props: any) {
     }
   }, []);
 
-  const value = React.useMemo(
-    () => ({ login, logout, register, token, setToken }),
-    [login, logout, register, token, setToken]
+  const value: Auth = React.useMemo(
+    () => ({ login, logout, token, setToken }),
+    [login, logout, token, setToken]
   );
 
   return isLoading ? (
@@ -79,7 +74,7 @@ function AuthProvider(props: any) {
 }
 
 function useAuth() {
-  const context = React.useContext(AuthContext);
+  const context = React.useContext(AuthContext) as Auth;
   if (context === undefined) {
     throw new Error(`useAuth must be used within a AuthProvider`);
   }

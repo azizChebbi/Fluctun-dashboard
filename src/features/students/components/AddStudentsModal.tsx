@@ -1,6 +1,5 @@
 import React, { Reducer, useEffect, useReducer } from "react";
 import Modal from "@mui/material/Modal";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import Button from "@atoms/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Teacher } from "@reducers/teachers";
@@ -18,7 +17,7 @@ import {
 } from "@reducers/students";
 import AddMoreButton from "@atoms/AddMoreButton";
 
-const fields = ["Nom", "Prénom", "Code d'inscription", "Niveau"];
+const fields = ["Nom", "Prénom", "Code d'inscription", "Niveau", "Email"];
 
 interface IProps {
   open: boolean;
@@ -41,6 +40,15 @@ const AddStudentsModal: React.FC<IProps> = ({ open, setOpen }) => {
     });
   }, [studentsIDS]);
 
+  const handleClose = () => {
+    setOpen(false);
+    dispatch({
+      type: "DELETE_STUDENTS",
+      payload: null as unknown as Teacher,
+    });
+    setStudentsIDS([]);
+  };
+
   const createStudents = useMutation(
     "create-students",
     () => api.post("/auth/register-students", state.students),
@@ -57,14 +65,6 @@ const AddStudentsModal: React.FC<IProps> = ({ open, setOpen }) => {
       },
     }
   );
-  const handleClose = () => {
-    setOpen(false);
-    dispatch({
-      type: "DELETE_STUDENTS",
-      payload: null as unknown as Teacher,
-    });
-    setStudentsIDS([]);
-  };
 
   const isAllFieldsAreValid = () => {
     const students = state.students;

@@ -28,12 +28,7 @@ interface IProps {
   id: string;
 }
 
-export const TeachersForm: FC<IProps> = ({
-  setTeachersIDS,
-  state,
-  dispatch,
-  id,
-}) => {
+export const TeachersForm: FC<IProps> = ({ setTeachersIDS, dispatch, id }) => {
   //======================================================
   // state
   //======================================================

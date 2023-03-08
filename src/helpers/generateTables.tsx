@@ -11,6 +11,7 @@ export type FullTeacherData = {
   number: number;
   photo: string;
   subject: string;
+  answers: { question: { id: string } }[];
 };
 
 export type FullStudentData = {
@@ -26,6 +27,7 @@ export type FullStudentData = {
   photo: string;
   level: string;
   dateOfBirth: string;
+  questions: { id: string }[];
 };
 
 export const mapTeachersDataToColumns = (teachers: FullTeacherData[]) => {
@@ -46,13 +48,14 @@ export const mapTeachersDataToColumns = (teachers: FullTeacherData[]) => {
 
 export const mapStudentsDataToColumns = (students: FullStudentData[]) => {
   return students.map((t) => {
-    const { id, firstName, lastName, code, level } = t;
+    const { id, firstName, lastName, code, level, email } = t;
     return {
       id,
-      name: lastName,
+      lastName,
       firstName,
       code,
       level,
+      email,
       actions: id,
     };
   });

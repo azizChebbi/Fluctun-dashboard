@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { TeachersModal, Table } from "@features/teachers";
 import { getTeachers } from "@features/teachers/api";
 import { teachersColumns } from "@utils/columns";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Teachers = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -17,7 +18,9 @@ const Teachers = () => {
       <Table
         rows={mapTeachersDataToColumns(data ? data.data : [])}
         columns={teachersColumns}
-        noRowsIndicator={"Ajouter des enseignants"}
+        noRowsIndicator={
+          isLoading ? <ClipLoader color="#142B33" /> : "Aucun enseignant"
+        }
       />
       <Button className=" ml-auto mt-6" onClick={() => setOpen(true)}>
         Ajouter des enseignants

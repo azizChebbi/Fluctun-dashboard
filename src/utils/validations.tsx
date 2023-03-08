@@ -23,6 +23,7 @@ export const studentFormSchema = yup
         value: yup.string().required(),
       })
       .required(),
+    email: yup.string().email().required(),
   })
   .required();
 

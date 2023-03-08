@@ -5,11 +5,9 @@ import { Auth, useAuth } from "context/auth-context";
 import UnauthenticatedApp from "./routes/UnauthenticatedApp";
 
 function App() {
-  const { token } = useAuth() as unknown as Auth;
-
+  const { token } = useAuth();
   return (
     <div className="App">
-      <NotifyContainer />
       {token ? (
         <Wrapper>
           <AuthenticatedApp />

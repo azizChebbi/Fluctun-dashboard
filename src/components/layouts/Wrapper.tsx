@@ -1,4 +1,4 @@
-import Sidebar from "@molecules/Sidebar";
+import Sidebar from "@organisms/Sidebar";
 import React, { FC, ReactNode, useState } from "react";
 
 interface IProps {

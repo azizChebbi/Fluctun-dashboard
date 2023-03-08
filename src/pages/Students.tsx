@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import AddStudentsModal from "@features/students/components/AddStudentsModal";
 import { Table } from "@organisms/Table";
 import { studentsColumns } from "@utils/columns";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Students = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -25,7 +26,9 @@ const Students = () => {
       <Table
         rows={mapStudentsDataToColumns(data ? data.data : [])}
         columns={studentsColumns}
-        noRowsIndicator={"Ajouter des étudiants"}
+        noRowsIndicator={
+          isLoading ? <ClipLoader color="#142B33" /> : "Aucun étudiant"
+        }
       />
       <Button className=" ml-auto mt-6" onClick={() => setOpen(true)}>
         Ajouter des etudiants

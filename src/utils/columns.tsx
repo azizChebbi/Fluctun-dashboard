@@ -17,6 +17,7 @@ export const teachersColumns: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "teachers-header",
     align: "center",
+
     flex: 1,
   },
   {
@@ -56,6 +57,7 @@ export const teachersColumns: GridColDef[] = [
     field: "actions",
     headerName: "",
     filterable: false,
+    sortable: false,
     align: "right",
     flex: 0.7,
     renderCell: (params: any) => {
@@ -94,6 +96,14 @@ export const studentsColumns: GridColDef[] = [
   {
     field: "level",
     headerName: "Niveau",
+    headerAlign: "center",
+    headerClassName: "teachers-header",
+    align: "center",
+    flex: 1,
+  },
+  {
+    field: "email",
+    headerName: "Email",
     headerAlign: "center",
     headerClassName: "teachers-header",
     align: "center",

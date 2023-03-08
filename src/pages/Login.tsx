@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Auth, useAuth } from "context/auth-context";
 import "react-toastify/dist/ReactToastify.css";
 import { loginSchema } from "@utils/validations";
+import { useMutation } from "react-query";
 
 interface IFormInputs {
   email: string;
@@ -20,6 +21,7 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth() as unknown as Auth;
+  useMutation;
   const {
     register,
     handleSubmit,
