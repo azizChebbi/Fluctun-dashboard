@@ -36,13 +36,50 @@ export type subject =
   | "Economie"
   | "Gestion"
   | "Philosophie"
-  | "Islamique"
-  | "Tic"
-  | "Algorithme et programmation"
-  | "Base de données";
+  | "Islamique";
 
 // define enum classes that take level as key and table of subjects as value
 export type Classes = Record<level, subject[]>; // { [key: level]: subject[] }
+
+export const subjects: subject[] = [
+  "Mathématique",
+  "Sciences",
+  "Physique",
+  "Informatique",
+  "Technique",
+  "Français",
+  "Anglais",
+  "Arabe",
+  "Italien",
+  "Espagnol",
+  "Allemand",
+  "Histoire",
+  "Géographie",
+  "Economie",
+  "Gestion",
+  "Philosophie",
+  "Islamique",
+];
+
+export const levels: level[] = [
+  "1ére année secondaire",
+  "2éme année sciences",
+  "2éme année lettres",
+  "2éme année économie",
+  "2éme année informatique",
+  "3éme année sciences",
+  "3éme année lettres",
+  "3éme année économie",
+  "3éme année informatique",
+  "3éme année mathématique",
+  "3éme année techniques",
+  "4éme année sciences",
+  "4éme année lettres",
+  "4éme année économie",
+  "4éme année informatique",
+  "4éme année mathématique",
+  "4éme année techniques",
+];
 
 export const classes: Classes = {
   "1ére année secondaire": [
@@ -200,8 +237,6 @@ export const classes: Classes = {
     "Allemand",
     "Espagnol",
     "Italien",
-    "Algorithme et programmation",
-    "Tic",
   ],
   "4éme année mathématique": [
     "Mathématique",
@@ -290,9 +325,6 @@ export const classes: Classes = {
     "Allemand",
     "Espagnol",
     "Italien",
-    "Algorithme et programmation",
-    "Tic",
-    "Base de données",
   ],
 };
 
@@ -324,12 +356,6 @@ export const subjectOptions: SubjectOption[] = [
   { value: "Italien", label: "Italien" },
   { value: "Economie", label: "Economie" },
   { value: "Gestion", label: "Gestion" },
-  {
-    value: "Algorithme et programmation",
-    label: "Algorithme et programmation",
-  },
-  { value: "Tic", label: "Tic" },
-  { value: "Base de données", label: "Base de données" },
 ];
 
 export const levelOptions: LevelOption[] = [

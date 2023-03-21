@@ -26,14 +26,14 @@ export const tabs: Tab[] = [
     href: "/etudiants",
     svg: etudiants,
   },
-  {
-    label: "Questions",
-    href: "/questions",
-    svg: questions,
-  },
-  {
-    label: "Cours",
-    href: "/cours",
-    svg: cours,
-  },
+  // {
+  //   label: "Questions",
+  //   href: "/questions",
+  //   svg: questions,
+  // },
+  // {
+  //   label: "Cours",
+  //   href: "/cours",
+  //   svg: cours,
+  // },
 ];

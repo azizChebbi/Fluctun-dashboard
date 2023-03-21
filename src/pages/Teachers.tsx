@@ -10,7 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const Teachers = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { isLoading, isError, data, error } = useQuery("teachers", getTeachers);
+  const { isLoading, data } = useQuery("teachers", getTeachers);
 
   return (
     <div className=" h-full flex flex-col justify-center">
@@ -18,9 +18,7 @@ const Teachers = () => {
       <Table
         rows={mapTeachersDataToColumns(data ? data.data : [])}
         columns={teachersColumns}
-        noRowsIndicator={
-          isLoading ? <ClipLoader color="#142B33" /> : "Aucun enseignant"
-        }
+        noRowsIndicator={isLoading ? <ClipLoader color="#142B33" /> : "Aucun enseignant"}
       />
       <Button className=" ml-auto mt-6" onClick={() => setOpen(true)}>
         Ajouter des enseignants
