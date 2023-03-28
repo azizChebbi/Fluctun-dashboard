@@ -24,13 +24,11 @@ export const Table: React.FC<IProps> = ({ rows, columns, noRowsIndicator }) => {
         rows={rows}
         columns={columns}
         pageSize={8}
-        rowsPerPageOptions={[8]}
+        rowsPerPageOptions={[7]}
         // components={{ Toolbar: GridToolbar }}
         disableSelectionOnClick
         components={{
-          NoRowsOverlay: () => (
-            <NoRowsIndicator>{noRowsIndicator}</NoRowsIndicator>
-          ),
+          NoRowsOverlay: () => <NoRowsIndicator>{noRowsIndicator}</NoRowsIndicator>,
         }}
       />
     </Box>

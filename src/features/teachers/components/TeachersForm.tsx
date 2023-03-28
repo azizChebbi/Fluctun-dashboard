@@ -1,12 +1,5 @@
 import Input from "@atoms/Input";
-import React, {
-  Dispatch,
-  FC,
-  useState,
-  useEffect,
-  useId,
-  useCallback,
-} from "react";
+import React, { Dispatch, FC, useState, useEffect, useId, useCallback } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { Tooltip } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
@@ -52,7 +45,7 @@ export const TeachersForm: FC<IProps> = ({ setTeachersIDS, dispatch, id }) => {
   //======================================================
 
   useEffect(() => {
-    console.log(getValues());
+    // console.log(getValues());
     const { firstName, lastName, cin, subject, email, number } = getValues();
     dispatch({
       type: "UPDATE_TEACHER",
@@ -148,10 +141,7 @@ export const TeachersForm: FC<IProps> = ({ setTeachersIDS, dispatch, id }) => {
         errorMessage={errors.number?.message}
         registration={register("number")}
       />
-      <button
-        className=" absolute top-1/2 transform -translate-y-1/2 right-12"
-        onClick={onDelete}
-      >
+      <button className=" absolute top-1/2 transform -translate-y-1/2 right-12" onClick={onDelete}>
         <Tooltip title="Effacer">
           <DeleteOutlineOutlinedIcon sx={{ color: "#C5C5C5" }} />
         </Tooltip>

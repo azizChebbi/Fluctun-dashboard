@@ -13,7 +13,7 @@ const Teachers = () => {
   const { isLoading, data } = useQuery("teachers", getTeachers);
 
   return (
-    <div className=" h-full flex flex-col justify-center">
+    <div className=" h-full flex flex-col justify-center p-10">
       <p className=" text-blue text-2xl font-semibold mb-6">Enseignants</p>
       <Table
         rows={mapTeachersDataToColumns(data ? data.data : [])}

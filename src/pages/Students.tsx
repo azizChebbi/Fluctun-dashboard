@@ -11,24 +11,18 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const Students = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { isLoading, isError, data, error } = useQuery(
-    "students",
-    () => api.get("/admin/students"),
-    {
-      onError: () => {
-        notifyError("Un erreur est produit");
-      },
-    }
-  );
+  const { isLoading, isError, data, error } = useQuery("students", () => api.get("/admin/students"), {
+    onError: () => {
+      notifyError("Un erreur est produit");
+    },
+  });
   return (
-    <div className=" h-full flex flex-col justify-center">
+    <div className=" h-full flex flex-col justify-center p-10">
       <p className=" text-blue text-2xl font-semibold mb-6">Etudiants</p>
       <Table
         rows={mapStudentsDataToColumns(data ? data.data : [])}
         columns={studentsColumns}
-        noRowsIndicator={
-          isLoading ? <ClipLoader color="#142B33" /> : "Aucun étudiant"
-        }
+        noRowsIndicator={isLoading ? <ClipLoader color="#142B33" /> : "Aucun étudiant"}
       />
       <Button className=" ml-auto mt-6" onClick={() => setOpen(true)}>
         Ajouter des etudiants

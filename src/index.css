@@ -14,15 +14,29 @@ html {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* background-color: red; */
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.ql-editor {
+  min-height: 300px;
+}
+
+.question-cover {
+  background-image: linear-gradient(rgba(252, 252, 252, 0), rgba(252, 252, 252, 0.8), #fcfcfc);
+}
+
+.answered-ticket {
+  background-image: linear-gradient(#38f390, #005533);
+}
+
+.unanswered-ticket {
+  background-image: linear-gradient(#ba3f3f, #ff7d7d);
 }

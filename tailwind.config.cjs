@@ -17,6 +17,7 @@ module.exports = {
         g300: "#AFAFAF",
         g400: "#8E8E8E",
         error: "#EF4444",
+        orange: "#F68E79",
       },
       fontSize: {
         xss: "10px",
@@ -24,6 +25,10 @@ module.exports = {
       },
       borderRadius: {
         xl: "10px",
+      },
+      boxShadow: {
+        question: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;",
+        subject: "rgba(0, 0, 0, 0.15) 0px 3px 5px;",
       },
     },
   },

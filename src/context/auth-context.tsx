@@ -22,7 +22,6 @@ function AuthProvider(props: any) {
   async function getAccessToken() {
     try {
       const res = await api.post("/auth/refresh");
-      console.log(res);
       setToken(res.data.access_token);
     } catch (error) {
       setToken(null);
@@ -35,22 +34,18 @@ function AuthProvider(props: any) {
     getAccessToken();
   }, []);
 
-  const login = React.useCallback(
-    async ({ email, password }: { email: string; password: string }) => {
-      try {
-        const res = await api.post("/auth/loginAdmin", {
-          email,
-          password,
-        });
-        setToken(res.data.access_token);
-      } catch (error: any) {
-        if (error.code == "ERR_NETWORK")
-          notifyError("Une erreur s'est produite, essayez plus tard");
-        else notifyError("L'adresse email ou le mot de passe est incorrect");
-      }
-    },
-    []
-  );
+  const login = React.useCallback(async ({ email, password }: { email: string; password: string }) => {
+    try {
+      const res = await api.post("/auth/loginAdmin", {
+        email,
+        password,
+      });
+      setToken(res.data.access_token);
+    } catch (error: any) {
+      if (error.code == "ERR_NETWORK") notifyError("Une erreur s'est produite, essayez plus tard");
+      else notifyError("L'adresse email ou le mot de passe est incorrect");
+    }
+  }, []);
 
   const logout = React.useCallback(async () => {
     try {
@@ -61,16 +56,9 @@ function AuthProvider(props: any) {
     }
   }, []);
 
-  const value: Auth = React.useMemo(
-    () => ({ login, logout, token, setToken }),
-    [login, logout, token, setToken]
-  );
+  const value: Auth = React.useMemo(() => ({ login, logout, token, setToken }), [login, logout, token, setToken]);
 
-  return isLoading ? (
-    <FullPageSpinner />
-  ) : (
-    <AuthContext.Provider value={value} {...props} />
-  );
+  return isLoading ? <FullPageSpinner /> : <AuthContext.Provider value={value} {...props} />;
 }
 
 function useAuth() {

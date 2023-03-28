@@ -12,7 +12,7 @@ const Wrapper: FC<IProps> = ({ children }) => {
       className={` grid ${sidebarIsSmall ? " grid-cols-biggerWrapper" : "grid-cols-wrapper"} h-screen overflow-hidden`}
     >
       <Sidebar sidebarIsSmall={sidebarIsSmall} setSidebarIsSmall={setSidebarIsSmall} />
-      <div className=" bg-background p-10 h-full overflow-scroll">{children}</div>
+      <div className=" bg-background h-full overflow-scroll">{children}</div>
     </div>
   );
 };

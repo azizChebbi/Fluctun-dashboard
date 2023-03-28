@@ -40,7 +40,7 @@ const Statistiques = () => {
     }
   }, [topTeachers.isSuccess, teachers.isSuccess]);
   return (
-    <div>
+    <div className=" p-10">
       <Counts />
       <Loader isLoading={getQuestionsAndAnswersPerMonthQuery.isLoading}>
         <div className=" w-2/3">

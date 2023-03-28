@@ -5,15 +5,9 @@ import Questions from "@pages/Questions";
 import Statistiques from "@pages/Statistiques";
 import { Navigate } from "react-router-dom";
 import Login from "@pages/Login";
+import Description from "@pages/Details";
 
-type Path =
-  | "/"
-  | "/etudiants"
-  | "/enseignants"
-  | "/questions"
-  | "/cours"
-  | "/login"
-  | "*";
+type Path = "/" | "/etudiants" | "/enseignants" | "/questions" | "/cours" | "/login" | "/questions/:id" | "*";
 type Route = {
   path: Path;
   element: JSX.Element;
@@ -25,6 +19,7 @@ export const authenticatedRoutes: Route[] = [
   { path: "/enseignants", element: <Enseignants /> },
   { path: "/questions", element: <Questions /> },
   { path: "/cours", element: <Cours /> },
+  { path: "/questions/:id", element: <Description /> },
   { path: "*", element: <Navigate to="/" replace /> },
 ];
 
